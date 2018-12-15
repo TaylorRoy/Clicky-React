@@ -22,7 +22,7 @@ const FriendCard = props => (
     <span onClick={() => props.removeFriend(props.id)} className="remove">
       𝘅
     </span>
-    <button data-id={props.id} onClick={() => props.shuffleFriends()} className="shuffle">
+    <button data-id={props.id} onClick={() => props.shuffleFriends(props.id)} className="shuffle">
       click for random
     </button>
     <button data-id={props.id} onClick={() => props.keepScore(props.id)} className="score">

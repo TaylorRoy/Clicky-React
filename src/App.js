@@ -3,6 +3,7 @@ import FriendCard from "./components/FriendCard";
 import Wrapper from "./components/Wrapper";
 import Title from "./components/Title";
 import Score from "./components/Score/Score"
+import HighScore from "./components/HighScore/HighScore"
 import friends from "./friends.json";
 import "./App.css";
 
@@ -11,8 +12,7 @@ class App extends Component {
   state = {
     friends,
     score: 0,
-    id: "",
-    position: 0,
+    highScore: 0,
     clickedOn: []
   };
 
@@ -25,7 +25,8 @@ class App extends Component {
   };
 
   //use Durstenfeld shuffle function to randomize imageArray
-  shuffleFriends = (array = this.state.friends) => {
+  shuffleFriends = (id) => {
+    var array = this.state.friends
     console.log("this shuffle", this);
     var friendArray = this.state.friends;
     console.log("friendArray", friendArray);
@@ -39,37 +40,35 @@ class App extends Component {
     }
     //reset friends to randomized array
     this.setState({ friends: array })
-    this.keepScore();
+    //call the keepScore function to handle score and highScore
+    this.keepScore(id);
   };
 
 
   keepScore = (id) => {
     console.log("button id", id);
-    this.setState({ score: this.state.score + 1 })
-    console.log("score", this.state.score);
     var inArray = this.state.clickedOn.includes(id);
-    console.log("inArray", inArray);
-    this.state.clickedOn.push(id);
-    this.setState({position: this.state.position + 1});
-    console.log("position", this.state.position);
-    console.log("clicked on array", this.state.clickedOn);
-
-    //grab id
-    //put into already clicked array
-    //add score
-    //if already in clicked array score = 0
-    //keep track of largest number of 
+    console.log("inArray?", inArray);
+    if (inArray === false) {
+      this.setState({ score: this.state.score + 1 })
+      // this.setState({ highScore: this.state.highScore + 1 })
+      console.log("score", this.state.score);
+      // console.log("highScore", this.state.highScore);
+      this.state.clickedOn.push(id);
+      console.log("clicked on array", this.state.clickedOn);
+    }
+    else {
+      if (this.state.highScore >= this.state.score) {
+        this.setState({ score: 0 });
+        this.setState({ clickedOn: [] });
+      }
+      else
+        this.setState({ highScore: this.state.score });
+        console.log("highScore", this.state.highScore);
+        this.setState({ score: 0 });
+        this.setState({ clickedOn: [] });
+    }
   }
-
-  handleInputChange = event => {
-    const name = event.target.name;
-    const value = event.target.value;
-    this.setState({
-      [name]: value
-    });
-  };
-
-
 
   // Map over this.state.friends and render a FriendCard component for each friend object
   render() {
@@ -77,6 +76,7 @@ class App extends Component {
       <Wrapper>
         <Title>Friends List</Title>
         <Score>{this.state.score}</Score>
+        <HighScore>{this.state.highScore}</HighScore>
         {this.state.friends.map(friend => (
           <FriendCard
             removeFriend={this.removeFriend}

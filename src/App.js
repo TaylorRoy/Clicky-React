@@ -3,7 +3,6 @@ import FriendCard from "./components/FriendCard";
 import Wrapper from "./components/Wrapper";
 import Title from "./components/Title";
 import Score from "./components/Score/Score"
-import HighScore from "./components/HighScore/HighScore"
 import friends from "./friends.json";
 import "./App.css";
 
@@ -74,9 +73,11 @@ class App extends Component {
   render() {
     return (
       <Wrapper>
-        <Title>Friends List</Title>
-        <Score>{this.state.score}</Score>
-        <HighScore>{this.state.highScore}</HighScore>
+        <Title>
+          Tree Memory Game
+        <Score className="score">Score: {this.state.score}</Score>
+        <Score className="highScore">Highscore: {this.state.highScore}/{friends.length}</Score>
+        </Title>
         {this.state.friends.map(friend => (
           <FriendCard
             removeFriend={this.removeFriend}
